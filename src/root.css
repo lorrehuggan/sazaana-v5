@@ -1,40 +1,62 @@
-body {
-  font-family: Gordita, Roboto, Oxygen, Ubuntu, Cantarell,
-    'Open Sans', 'Helvetica Neue', sans-serif;
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 500;
+  src: url('/fonts/DMSans-Medium.ttf') format('truetype');
 }
 
-a {
-  margin-right: 1rem;
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: url("/fonts/DMSans-Bold.ttf") format("truetype");
 }
 
-main {
-  text-align: center;
-  padding: 1em;
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 900;
+  src: url("/fonts/DMSans-Black.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: url("/fonts/DMSans-Regular.ttf") format("truetype");
+}
+
+:root {
+  --color-foreground: hsla(0, 0%, 95%, 1);
+  --color-background: hsla(0, 0%, 5%, 1);
+  --color-muted: hsla(0, 0%, 65%, 1);
+  --color-muted-light: hsla(0, 0%, 85%, 1);
+  --color-muted-dark: hsla(0, 0%, 10%, 1);
+  --color-primary: hsla(344, 84%, 50%, 1);
+  --color-primary-light: hsla(344, 84%, 70%, 1);
+  --color-primary-dark: hsla(344, 84%, 30%, 1);
+  --color-destructive: hsla(0, 84%, 60%, 1);
+  --color-destructive-light: hsla(0, 84%, 80%, 1);
+  --color-destructive-dark: hsla(0, 84%, 40%, 1);
+  --color-success: hsla(120, 84%, 50%, 1);
+  --color-success-light: hsla(120, 84%, 70%, 1);
+  --color-success-dark: hsla(120, 84%, 30%, 1);
+  --color-warning: hsla(44, 84%, 50%, 1);
+  --color-warning-light: hsla(44, 84%, 70%, 1);
+  --color-warning-dark: hsla(44, 84%, 30%, 1);
+  --color-info: hsla(210, 84%, 50%, 1);
+  --color-info-light: hsla(210, 84%, 70%, 1);
+  --color-info-dark: hsla(210, 84%, 30%, 1);
+}
+
+html {
+  font-family: 'DM Sans', sans-serif;
+  color: var(--color-foreground);
+  background-color: var(--color-background);
+}
+
+.container {
+  max-width: 1044px;
+  width: 91%;
   margin: 0 auto;
-}
-
-h1 {
-  color: #335d92;
-  text-transform: uppercase;
-  font-size: 4rem;
-  font-weight: 100;
-  line-height: 1.1;
-  margin: 4rem auto;
-  max-width: 14rem;
-}
-
-p {
-  max-width: 14rem;
-  margin: 2rem auto;
-  line-height: 1.35;
-}
-
-@media (min-width: 480px) {
-  h1 {
-    max-width: none;
-  }
-
-  p {
-    max-width: none;
-  }
 }
