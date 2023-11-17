@@ -1,17 +1,20 @@
-import clsx from "clsx"
-import { createEffect, createSignal, For, Show } from "solid-js"
-import style from "./style.module.css"
-import { createServerAction$, json } from "solid-start/server";
+import { createEffect, createSignal, For, Show, useContext } from "solid-js"
+import { createServerAction$ } from "solid-start/server";
+import { QueriesContext } from "~/context/queries";
+import { TracklistContext } from "~/context/tracklist";
 import { searchArtistServerAction } from "./server";
+
+import style from "./style.module.css"
+
+
 
 const Search = () => {
   const [search, setSearch] = createSignal({ value: "" })
   const [results, setResults] = createSignal<Spotify.ArtistObjectFull[] | null>(null)
-  const [searchResult, { Form }] = createServerAction$(async (form: FormData, { request }) => {
-    const artist = form.get('artist') as string
-    if (!artist) return
-    const serverActionResult = await searchArtistServerAction(artist)
-    return serverActionResult
+  const { items, setItems } = useContext(TracklistContext)
+  const { items: queries, setItems: setQueries } = useContext(QueriesContext)
+  const [searchAction, { Form }] = createServerAction$(async (form: FormData, { request }) => {
+    return await searchArtistServerAction(form)
   })
 
   const handleInput = (e: InputEvent & {
@@ -20,8 +23,16 @@ const Search = () => {
     setSearch({ value: e.target.value })
   }
 
+  const handleSelect = async (artist_id: string) => {
+    setQueries({ ids: [...queries.ids, artist_id] })
+    const unique_ids = [...new Set([...queries.ids])]
+    const request = await fetch(`/api/spotify/artist/recommended/${unique_ids.join(",")}`)
+    const response = await request.json()
+    console.log(response)
+  }
+
   createEffect(async () => {
-    setResults(await searchResult.result?.json())
+    setResults(await searchAction.result?.json())
   })
 
   return (
@@ -29,17 +40,15 @@ const Search = () => {
       <section class={style.search}>
         <Form>
           <input onInput={handleInput} autocomplete="off" type="text" name="artist" value={search().value} placeholder="Enter artist name..." />
-          <button type="submit" disabled={searchResult.pending}>{searchResult.pending ? "Searching" : "Search"}</button>
+          <button type="submit" disabled={searchAction.pending}>{searchAction.pending ? "Searching" : "Search"}</button>
         </Form>
       </section>
       <Show when={results() !== null && search().value.length > 0}>
         <ul class={style.results}>
           <For each={results()}>
-            {(result, i) => {
+            {(result) => {
               if (!result.images[2]?.url) return <></>
-              return <li class={clsx("", {
-                [style.first]: i() % 2 === 0
-              })}>
+              return <li onClick={() => handleSelect(result.id)}>
                 {result.images[2].url && (
                   <img src={result.images[2]?.url} alt="" />
                 )}

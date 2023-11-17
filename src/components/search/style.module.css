@@ -51,15 +51,12 @@
     background-color: var(--color-muted-dark);
   }
 
-  & .first {
-    background-color: hsl(0, 0%, 6%);
-  }
-
   & li {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     cursor: pointer;
+    background-color: hsl(0, 0%, 6%);
 
     & img {
       width: 2.5rem;

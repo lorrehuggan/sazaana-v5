@@ -12,6 +12,8 @@ import {
   Title,
 } from "solid-start";
 import Nav from "./components/nav";
+import QueriesProvider from "./context/queries";
+import TracklistProvider from "./context/tracklist";
 import "./pre.css"
 import "./root.css";
 
@@ -26,12 +28,16 @@ export default function Root() {
       <Body>
         <Suspense>
           <ErrorBoundary>
-            <Nav />
-            <main class="container">
-              <Routes>
-                <FileRoutes />
-              </Routes>
-            </main>
+            <QueriesProvider>
+              <TracklistProvider>
+                <Nav />
+                <main class="container">
+                  <Routes>
+                    <FileRoutes />
+                  </Routes>
+                </main>
+              </TracklistProvider>
+            </QueriesProvider>
           </ErrorBoundary>
         </Suspense>
         <Scripts />

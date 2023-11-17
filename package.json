@@ -30,7 +30,8 @@
     "lucide-solid": "^0.292.0",
     "motion": "^10.16.4",
     "solid-js": "^1.8.5",
-    "solid-start": "^0.3.10"
+    "solid-start": "^0.3.10",
+    "zod": "^3.22.4"
   },
   "engines": {
     "node": ">=18"
