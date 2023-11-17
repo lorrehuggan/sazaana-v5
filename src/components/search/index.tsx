@@ -1,12 +1,18 @@
 import clsx from "clsx"
-import { createSignal, For, Show } from "solid-js"
+import { createEffect, createSignal, For, Show } from "solid-js"
 import style from "./style.module.css"
-
+import { createServerAction$, json } from "solid-start/server";
+import { searchArtistServerAction } from "./server";
 
 const Search = () => {
   const [search, setSearch] = createSignal({ value: "" })
-  const [fetchState, setFetchState] = createSignal<'loading' | 'idle' | 'error' | 'success'>('idle')
   const [results, setResults] = createSignal<Spotify.ArtistObjectFull[] | null>(null)
+  const [searchResult, { Form }] = createServerAction$(async (form: FormData, { request }) => {
+    const artist = form.get('artist') as string
+    if (!artist) return
+    const serverActionResult = await searchArtistServerAction(artist)
+    return serverActionResult
+  })
 
   const handleInput = (e: InputEvent & {
     target: HTMLInputElement
@@ -14,36 +20,19 @@ const Search = () => {
     setSearch({ value: e.target.value })
   }
 
-  const handleSubmit = async () => {
-    if (Search() === "") return
-    setFetchState('loading')
-    try {
-      const res = await fetch(`/api/spotify/query`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ artist: search().value }),
-      })
-      const data = await res.json() as Spotify.ArtistObjectFull[]
-      setResults(data)
-      setFetchState('success')
-    } catch (err) {
-      if (err instanceof Error) {
-        console.error(err.message)
-        setFetchState('error')
-      }
-    }
-
-  }
+  createEffect(async () => {
+    setResults(await searchResult.result?.json())
+  })
 
   return (
     <>
       <section class={style.search}>
-        <input autocomplete="off" onInput={handleInput} type="text" name="search" placeholder="Enter artist name" />
-        <button onClick={handleSubmit} disabled={fetchState() === "loading"}>{fetchState() === "loading" ? "finding" : "find"}</button>
+        <Form>
+          <input onInput={handleInput} autocomplete="off" type="text" name="artist" value={search().value} placeholder="Enter artist name..." />
+          <button type="submit" disabled={searchResult.pending}>{searchResult.pending ? "Searching" : "Search"}</button>
+        </Form>
       </section>
-      <Show when={results() !== null}>
+      <Show when={results() !== null && search().value.length > 0}>
         <ul class={style.results}>
           <For each={results()}>
             {(result, i) => {

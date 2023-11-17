@@ -2,9 +2,11 @@
   margin-top: 1.5rem;
   border-bottom: 0.5px solid var(--color-muted-dark);
   padding: 0.5rem 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  & form {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
   & input {
     all: unset;
     width: 100%;
@@ -26,6 +28,7 @@
     &:hover {
       background-color: var(--color-muted-dark);
     }
+  }
   }
 }
 

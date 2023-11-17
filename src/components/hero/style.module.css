@@ -7,7 +7,7 @@
 
     & div {
     display: inline-block;
-    background: linear-gradient(to right, hsla(344, 84%, 50%, 1), cubic-bezier(0,.5,0.5,.9), hsla(344, 84%, 60%, 1));
+    background: linear-gradient(to right, hsla(344, 84%, 48%, 1), cubic-bezier(0,.5,0.5,.9), hsla(344, 84%, 62%, 1));
     background-size: 100%;
     -webkit-background-clip: text;
     -moz-background-clip: text;
